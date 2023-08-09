@@ -147,7 +147,7 @@ def show_line_graph_visualization(line_sip_data):
         df = df.sort_values(by="Form Count", ascending=False)
 
         # Assign different colors for each SIP value
-        colors = plt.colormaps.get_cmap("tab20", len(df["SIP"]))
+        colors = plt.cm.get_cmap("tab20", len(df["SIP"]))
         color_dict = {sip: colors(i) for i, sip in enumerate(df["SIP"])}
 
         fig, ax = plt.subplots(figsize=(10, 6))
