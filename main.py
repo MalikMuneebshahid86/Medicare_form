@@ -241,7 +241,49 @@ def logout():
     user_authenticated = False
     #components.html("<script>window.location.reload();</script>", height=0)
 
+def show_visualization1(team_counts):
+    if team_counts:
+        st.write("Form Submission Counts by Team:")
+        colors = {
+            'BLUE': 'cornflowerblue',
+            'YELLOW': 'gold',
+            'GREEN': 'olivedrab'
+        }
 
+        # Extract teams and lines for each submission count
+        team_lines = [(team, line) for team, line in team_counts.keys()]
+        unique_teams = list(set([team for team, _ in team_lines]))
+        unique_lines = list(set([line for _, line in team_lines]))
+
+        # Initialize a data dictionary for plotting
+        data = {team: {line: 0 for line in unique_lines} for team in unique_teams}
+
+        # Fill in the data dictionary with submission counts
+        for (team, line), count in team_counts.items():
+            data[team][line] = count
+
+        # Convert data dictionary into a DataFrame for plotting
+        df_team_lines = pd.DataFrame(data)
+
+        # Plot the data
+        df_team_lines.plot(kind='bar', stacked=True, color=[colors[team] for team in unique_teams])
+        plt.xlabel("Line")
+        plt.ylabel("Form Count")
+        plt.title("Form Count by Team and Line Transfer")
+        plt.legend(title="Team")
+        ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+        st.pyplot(plt.gcf())
+    else:
+        st.write("No form submissions yet.")
+def get_team_line_counts(conn):
+    query = """
+    SELECT team, line, COUNT(*) as count
+    FROM form_data
+    GROUP BY team, line
+    """
+    cursor = conn.execute(query)
+    team_line_counts = {(row[0], row[1]): row[2] for row in cursor.fetchall()}
+    return team_line_counts
 def main():
     #global user_authenticated
     st.title("Medicare Form Submission")
@@ -278,6 +320,14 @@ def main():
             show_line_graph_visualization(line_sip_data)
         else:
             st.write("No form submissions yet.")
+    if st.button("Line Transfer Visualizaion"):
+        conn = create_connection()
+        data=get_team_line_counts(conn)
+        conn.close()
+        if data:
+            show_visualization1(data)
+        else:
+            st.write("Nthing to show")
     conn=create_connection()
     create_users_table(conn)
     conn.close()
