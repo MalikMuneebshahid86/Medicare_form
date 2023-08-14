@@ -271,7 +271,7 @@ def show_visualization1(team_counts):
         plt.ylabel("Form Count")
         plt.title("Form Count by Team and Line Transfer")
         plt.legend(title="Team")
-        ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+        #ax.yaxis.set_major_locator(MaxNLocator(integer=True))
         st.pyplot(plt.gcf())
     else:
         st.write("No form submissions yet.")
