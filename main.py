@@ -1,4 +1,4 @@
-import streamlit as st
+ import streamlit as st
 import sqlite3
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -284,7 +284,7 @@ def get_team_line_counts(conn):
     cursor = conn.execute(query)
     team_line_counts = {(row[0], row[1]): row[2] for row in cursor.fetchall()}
     return team_line_counts
-    def main():
+def main():
     #global user_authenticated
     st.title("Medicare Form Submission")
     phone = st.text_input("Phone")
