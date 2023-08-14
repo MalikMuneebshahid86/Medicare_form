@@ -320,7 +320,7 @@ def main():
             show_line_graph_visualization(line_sip_data)
         else:
             st.write("No form submissions yet.")
-if st.button("Line Transfer Visualizaion"):
+    if st.button("Line Transfer Visualizaion"):
         conn = create_connection()
         data=get_team_line_counts(conn)
         conn.close()
